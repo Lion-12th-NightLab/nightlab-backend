@@ -1,2 +1,2 @@
-# babylion_BE
-[멋사 아기사자 소셜] Kakao OAuth를 이용해 사용자 등록, 로그인
+# Feelin
+[🦁멋쟁이 사자처럼🦁] 애거돈; 대학생들의 필기본 공유 플랫폼 Feelin
