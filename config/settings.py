@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -150,3 +151,12 @@ REST_FRAMEWORK = {
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
 ]
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    # Access 토큰 유효 시간 설정하기
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+	# Refresh 토큰 유효 시간 설정하기
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}

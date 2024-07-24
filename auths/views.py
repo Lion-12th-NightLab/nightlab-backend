@@ -123,42 +123,6 @@ def token_reissue(request):
     return Response({
         'access_token': str(new_access_token)
     }, status=status.HTTP_200_OK)
-    
-
-
-
-# @api_view(['POST'])
-# @permission_classes([AllowAny])
-# def register(request):
-#     serializer = UserRegisterRequestSerializer(data = request.data)
-#     if not serializer.is_valid():
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#     data = serializer.validated_data
-#     print(data)
-
-#     kakao_data = kakao_access_token(data['access_code'])
-#     print(kakao_data)
-#     nickname = kakao_nickname(kakao_data)
-#     print(nickname)
-#     description = data.get('description')
-
-#     if not nickname or not description:
-#         return Response({"error": "Nickname and description are required"}, status=status.HTTP_400_BAD_REQUEST)
-
-#     try:
-#         user = MutsaUser.objects.get(nickname=nickname)
-#         return Response({'detail': '이미 등록 된 사용자를 중복 등록할 수 없습니다.'}, status=status.HTTP_400_BAD_REQUEST)
-#     except MutsaUser.DoesNotExist:
-#         user = MutsaUser.objects.create_user(nickname=nickname, description=description)
-#         refresh = RefreshToken.for_user(user)
-        
-#         data = MutsaUser.objects.get(nickname=nickname)
-#         data.login = True
-#         data.save()
-#         return Response({
-#             'access_token': str(refresh.access_token),
-#             'refresh_token': str(refresh)
-#         }, status=status.HTTP_201_CREATED)
 
 
 @api_view(['GET'])
