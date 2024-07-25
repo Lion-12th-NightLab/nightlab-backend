@@ -17,6 +17,10 @@ from .serializers import UserEmailSerializer, UserSerializer, UserVerifycodeSeri
 from django.core.mail import EmailMessage
 from django.utils.crypto import get_random_string
 from .models import Verify
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.utils.crypto import get_random_string
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -90,13 +94,18 @@ def SendVerification(request):
         
     # 새로운 인증 코드 생성
     verification_code = get_random_string(length=6)
-    message = f"인증코드는 {verification_code}입니다."
+    nickname = user_data.nickname
+    
+    # HTML 메시지 내용 생성
+    html_message = render_to_string('verification_email.html', {'verification_code': verification_code, 'nickname':nickname})
+    plain_message = strip_tags(html_message)  # HTML을 제거한 텍스트 메시지
     # 이메일 발송
-    email_message = EmailMessage(
+    email_message = EmailMultiAlternatives(
         subject='Verification Code',
-        body=message,
+        body=plain_message,
         to=[email],
     )
+    email_message.attach_alternative(html_message, "text/html")
     email_message.send()
         
     

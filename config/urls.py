@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from auths.views import login,token_reissue #verify
-from users.views import user, logout,users_list
+from users.views import user,users_list
 from verify.views import SendVerification, CheckVerifycode
 
 urlpatterns = [
@@ -29,6 +29,5 @@ urlpatterns = [
     path("verify", SendVerification),
     path("verify/check", CheckVerifycode),
     path("users", user),
-    path("users/logout", logout),
     path("users/list", users_list)
 ]
