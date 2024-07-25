@@ -17,12 +17,42 @@ from .serializers import UserEmailSerializer, UserSerializer, UserVerifycodeSeri
 from django.core.mail import EmailMessage
 from django.utils.crypto import get_random_string
 from .models import Verify
-
-# from auths.views import login,register,verify
-# from users.views import detail, update, logout
 from dotenv import load_dotenv
 
 load_dotenv()
+
+import json
+from django.conf import settings
+
+file_path = os.path.join(settings.BASE_DIR, 'verify', 'universities.json')
+
+# # JSON 파일을 읽어서 데이터 로드하기
+# with open('universities.json', 'r') as file:
+#     universities = json.load(file)
+
+# 이메일 주소에서 도메인 부분을 추출하는 함수
+def extract_domain(email):
+    try:
+        return email.split('@')[1]
+    except IndexError:
+        return None
+
+# 이메일 주소를 확인하는 함수
+def find_universities_by_email(email):
+    domain_to_check = extract_domain(email)
+    matched_universities = []
+    if domain_to_check:
+        try:
+            with open(file_path, 'r') as file:
+                universities = json.load(file)
+                for university, domain in universities.items():
+                    if domain_to_check == domain:
+                        matched_universities.append(university)
+        except FileNotFoundError:
+            print(f"File not found: {file_path}")
+    return matched_universities
+
+
 
 
 @api_view(['POST'])
@@ -36,6 +66,12 @@ def SendVerification(request):
     email = email_serializer.validated_data.get('email')
     print(email)
     
+    # 이메일 주소와 일치하는 학교 찾기
+    matched_universities = find_universities_by_email(email)
+    if not matched_universities:
+        return Response({"message": "학교 메일이 아닙니다."}, status=status.HTTP_400_BAD_REQUEST)
+
+
     # Serialize the user data
     user_serializer = UserSerializer(request.user)
 
@@ -72,6 +108,7 @@ def SendVerification(request):
     # 데이터베이스에 인증 코드 저장
     
     user_data.email = email
+    user_data.school = matched_universities[0]
     verify_code = Verify(user=user_data, verify_code =verification_code)
     user_data.save()
     verify_code.save()
