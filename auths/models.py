@@ -31,7 +31,7 @@ class MutsaUser(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     refresh_token = models.CharField(max_length=1024, blank=True)
-    mail = models.CharField(max_length=1024, blank=True)
+    email = models.EmailField(max_length=1024, blank=True)
     school = models.CharField(max_length=1024, default = '-')
 
 

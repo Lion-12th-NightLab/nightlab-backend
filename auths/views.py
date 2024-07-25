@@ -12,7 +12,9 @@ from rest_framework.serializers import Serializer
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from auths.models import MutsaUser
-from .serializers import UserLoginRequestSerializer, UserTokenReissue
+from .serializers import UserLoginRequestSerializer, UserTokenReissueSerializer, UserEmailSerializer
+from django.core.mail import EmailMessage
+from django.utils.crypto import get_random_string
 
 # from auths.views import login,register,verify
 # from users.views import detail, update, logout
@@ -101,7 +103,7 @@ def login(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def token_reissue(request):
-    refresh_token_serializer = UserTokenReissue(data=request.data)
+    refresh_token_serializer = UserTokenReissueSerializer(data=request.data)
 
     if not refresh_token_serializer.is_valid():
         return Response(refresh_token_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -125,7 +127,47 @@ def token_reissue(request):
     }, status=status.HTTP_200_OK)
 
 
-@api_view(['GET'])
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# def verify(request):
+#     return Response({'datail': 'Token is verified.'}, status=200)
+
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def verify(request):
-    return Response({'datail': 'Token is verified.'}, status=200)
+def SendVerification(request):
+    email_serializer = UserEmailSerializer(data = request.data)
+    print(email_serializer)
+    if not email_serializer.is_valid():
+        return Response(email_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    email = email_serializer.validated_data['email']
+    print(email)
+    
+
+    if not email:
+        return Response({"message": "이메일을 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST)
+        
+    if MutsaUser.objects.filter(email=email).exists():
+        return Response({"message": "이미 사용 중인 이메일입니다."}, status=status.HTTP_400_BAD_REQUEST)
+        
+    # # 기존의 코드가 있는 경우 삭제
+    # Verify.objects.filter(email=email).delete()
+        
+    # 새로운 인증 코드 생성
+    verification_code = get_random_string(length=6)
+    message = f"인증코드는 {verification_code}입니다."
+    print(message)
+    # 이메일 발송
+    email_message = EmailMessage(
+        subject='Verification Code',
+        body=message,
+        to=[email],
+    )
+    print('전송')
+    email_message.send()
+    print('전송됨')
+        
+    # 데이터베이스에 인증 코드 저장
+    # verify_code = Verify(email=email, code=verification_code)
+    # verify_code.save()
+        
+    return Response({'message': '인증 코드가 이메일로 발송되었습니다.', 'verification_code': verification_code}, status=status.HTTP_200_OK)

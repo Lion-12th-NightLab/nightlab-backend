@@ -8,5 +8,8 @@ from .models import MutsaUser
 class UserLoginRequestSerializer(serializers.Serializer):
     access_code = serializers.CharField()
 
-class UserTokenReissue(serializers.Serializer):
+class UserTokenReissueSerializer(serializers.Serializer):
     refresh_token = serializers.CharField()
+
+class UserEmailSerializer(serializers.Serializer):
+    email = serializers.EmailField()
