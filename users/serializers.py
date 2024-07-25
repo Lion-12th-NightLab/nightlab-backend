@@ -5,8 +5,3 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = MutsaUser
         fields = ['id','nickname']
-
-class UserLogoutSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MutsaUser
-        fields = '__all_'

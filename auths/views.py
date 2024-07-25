@@ -75,12 +75,9 @@ def login(request):
     if not serializer.is_valid():
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     data = serializer.validated_data
-    print(data)
 
     kakao_data = kakao_access_token(data['access_code'])
-    print(kakao_data)
     nickname = kakao_nickname(kakao_data)
-    print(nickname)
 
     try:
         user = MutsaUser.objects.get(nickname=nickname)
@@ -125,9 +122,3 @@ def token_reissue(request):
     return Response({
         'access_token': str(new_access_token)
     }, status=status.HTTP_200_OK)
-
-
-# @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-# def verify(request):
-#     return Response({'datail': 'Token is verified.'}, status=200)

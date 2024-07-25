@@ -12,7 +12,7 @@ from rest_framework.serializers import Serializer
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from auths.models import MutsaUser
-from .serializers import UserSerializer, UserLogoutSerializer
+from .serializers import UserSerializer
 
 # from auths.views import login,register,verify
 # from users.views import detail, update, logout
@@ -31,25 +31,10 @@ def user(request):
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def logout(request):
-    serializer = UserSerializer(request.user)
-    id = serializer.data.get('id')
-
-    data = MutsaUser.objects.get(id = id)
-    data.login = False
-    data.save()
-    return Response({
-        f"logoutId": id,
-        "detail": "로그아웃이 완료되었습니다."
-    }, status=status.HTTP_200_OK)
-
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def users_list(request):
-    login_user = MutsaUser.objects.all()
-    serializer = UserSerializer(login_user, many=True)
+    user = MutsaUser.objects.all()
+    serializer = UserSerializer(user, many=True)
     return Response(serializer.data)
 

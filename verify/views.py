@@ -53,18 +53,14 @@ def find_universities_by_email(email):
     return matched_universities
 
 
-
-
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def SendVerification(request):
     email_serializer = UserEmailSerializer(data=request.data)
-    print(email_serializer)
     if not email_serializer.is_valid():
         return Response(email_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     email = email_serializer.validated_data.get('email')
-    print(email)
     
     # 이메일 주소와 일치하는 학교 찾기
     matched_universities = find_universities_by_email(email)
@@ -95,7 +91,6 @@ def SendVerification(request):
     # 새로운 인증 코드 생성
     verification_code = get_random_string(length=6)
     message = f"인증코드는 {verification_code}입니다."
-    print(message)
     # 이메일 발송
     email_message = EmailMessage(
         subject='Verification Code',
