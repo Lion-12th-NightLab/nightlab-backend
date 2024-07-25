@@ -49,7 +49,7 @@ def logout(request):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def users_list(request):
-    login_user = MutsaUser.objects.filter(login=1)
+    login_user = MutsaUser.objects.all()
     serializer = UserSerializer(login_user, many=True)
     return Response(serializer.data)
 

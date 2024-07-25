@@ -4,7 +4,7 @@ from auths.models import MutsaUser
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = MutsaUser
-        fields = ['id','nickname','description','age','mbti']
+        fields = ['id','nickname']
 
 class UserLogoutSerializer(serializers.ModelSerializer):
     class Meta:

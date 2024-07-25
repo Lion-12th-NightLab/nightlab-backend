@@ -10,6 +10,3 @@ class UserLoginRequestSerializer(serializers.Serializer):
 
 class UserTokenReissueSerializer(serializers.Serializer):
     refresh_token = serializers.CharField()
-
-class UserEmailSerializer(serializers.Serializer):
-    email = serializers.EmailField()

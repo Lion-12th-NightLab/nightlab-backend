@@ -16,8 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from auths.views import login,token_reissue,SendVerification #verify
+from auths.views import login,token_reissue #verify
 from users.views import user, logout,users_list
+from verify.views import SendVerification, CheckVerifycode
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -25,7 +26,8 @@ urlpatterns = [
     path("auth/kakao/login", login),
     path("auth/kakao/token_reissue", token_reissue),
     # path("auth/kakao/verify", verify),
-    path("users/verify", SendVerification),
+    path("verify", SendVerification),
+    path("verify/check", CheckVerifycode),
     path("users", user),
     path("users/logout", logout),
     path("users/list", users_list)

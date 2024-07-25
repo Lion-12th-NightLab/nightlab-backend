@@ -30,7 +30,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 SECRET_KEY = 'django-insecure-p$+j#!xtm4$o3jp)y(wsyok52yb-r)+zlgaj-h^m$+cuw&elgl'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
 
     'auths',
-    "users"
+    "users",
+    "verify"
 ]
 
 MIDDLEWARE = [
