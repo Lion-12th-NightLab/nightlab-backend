@@ -12,7 +12,7 @@ from rest_framework.serializers import Serializer
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from auths.models import MutsaUser
-from .serializers import UserSerializer
+from .serializers import UserSerializer, UserResponseSerializer
 
 # from auths.views import login,register,verify
 # from users.views import detail, update, logout
@@ -25,11 +25,18 @@ def user(request):
             serializer = UserSerializer(request.user)  # instance에 request.user 전달
             return Response(serializer.data, status=status.HTTP_200_OK)
         case 'PATCH':
-            serializer = UserSerializer(request.user, data=request.data, partial=True)
+            serializer = UserResponseSerializer(request.user, data=request.data, partial=True)
+
+            if 'profile' in request.FILES:
+                profile = request.FILES['profile']
+            # 파일 처리
+            else:
+                profile = None
+            
             if serializer.is_valid():
+                serializer.profile = profile 
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])

@@ -5,3 +5,8 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = MutsaUser
         fields = ['id','nickname']
+
+class UserResponseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MutsaUser
+        fields = '__all__'

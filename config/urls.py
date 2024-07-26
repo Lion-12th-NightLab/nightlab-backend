@@ -15,7 +15,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
+
+from django.urls import path, include
 from auths.views import login,token_reissue #verify
 from users.views import user,users_list
 from verify.views import SendVerification, CheckVerifycode
@@ -25,9 +28,11 @@ urlpatterns = [
 
     path("auth/kakao/login", login),
     path("auth/kakao/token_reissue", token_reissue),
-    # path("auth/kakao/verify", verify),
     path("verify", SendVerification),
     path("verify/check", CheckVerifycode),
     path("users", user),
     path("users/list", users_list)
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
