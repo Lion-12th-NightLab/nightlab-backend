@@ -162,7 +162,7 @@ SIMPLE_JWT = {
     # Access 토큰 유효 시간 설정하기
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
 	# Refresh 토큰 유효 시간 설정하기
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=14),
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
