@@ -104,7 +104,7 @@ DATABASES = {
         'PASSWORD' : os.environ.get('RDS_PASSWORD'), # Password
         'HOST': os.environ.get('RDS_HOST'), # 생성한 데이터베이스 엔드포인트
         'PORT': '3306', # 데이터베이스 포트
-        "OPTIONS": {"charset": "utf8mb4",
+        "OPTIONS": {#"charset": "utf8mb4",
                     'init_command' : "SET sql_mode='STRICT_TRANS_TABLES'"
                     },
     }
