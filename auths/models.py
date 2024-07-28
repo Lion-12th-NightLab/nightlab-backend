@@ -25,15 +25,15 @@ class MutsaUserManager(BaseUserManager):
         return user
 
 class MutsaUser(AbstractBaseUser):
-    nickname = models.CharField(max_length=1024, unique=True)
-    user_name = models.CharField(max_length=1024, blank=True) #사용자로부터 받는 닉네임
+    nickname = models.CharField(max_length=255, unique=True)
+    user_name = models.CharField(max_length=100, blank=True) #사용자로부터 받는 닉네임
     profile = models.ImageField(upload_to='profiles/', blank=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-    refresh_token = models.CharField(max_length=1024, blank=True)
-    email = models.EmailField(max_length=1024, blank=True)
-    school = models.CharField(max_length=1024, blank=True)
-    college = models.CharField(max_length=1024, blank=True)
+    refresh_token = models.CharField(max_length=255, blank=True)
+    email = models.EmailField(max_length=100, blank=True)
+    school = models.CharField(max_length=30, blank=True)
+    college = models.CharField(max_length=30, blank=True)
 
 
     objects = MutsaUserManager()
