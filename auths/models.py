@@ -27,7 +27,7 @@ class MutsaUserManager(BaseUserManager):
 class ProfileChoices(models.TextChoices):
     gentle = 'gentle', 'gentle' # 온화한 등대지기
     serious = 'serious', 'serious' # 진지한 등대지기
-    sharp = 'serious', 'serious' # 까칠한 등대지기
+    sharp = 'sharp', 'sharp' # 까칠한 등대지기
 
 
 class MutsaUser(AbstractBaseUser):
@@ -53,5 +53,8 @@ class MutsaUser(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_admin
+    
+    class Meta:
+        db_table = 'mutsa_user'
     
 
