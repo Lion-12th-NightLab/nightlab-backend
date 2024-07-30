@@ -24,16 +24,26 @@ class MutsaUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+class ProfileChoices(models.TextChoices):
+    gentle = 'gentle', 'gentle' # 온화한 등대지기
+    serious = 'serious', 'serious' # 진지한 등대지기
+    sharp = 'serious', 'serious' # 까칠한 등대지기
+
+
 class MutsaUser(AbstractBaseUser):
-    nickname = models.CharField(max_length=255, unique=True)
-    user_name = models.CharField(max_length=100, blank=True) #사용자로부터 받는 닉네임
-    profile = models.ImageField(upload_to='profiles/', blank=True)
+    nickname = models.CharField(max_length=64, unique=True) # 카카오 닉네임
+    user_name = models.CharField(max_length=64, blank=True) #사용자로부터 받는 닉네임
+    profile = models.CharField( #프로필 
+        max_length=10,
+        choices=ProfileChoices.choices,
+        blank=True
+    )
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-    refresh_token = models.CharField(max_length=255, blank=True)
-    email = models.EmailField(max_length=100, blank=True)
-    school = models.CharField(max_length=30, blank=True)
-    college = models.CharField(max_length=30, blank=True)
+    refresh_token = models.CharField(max_length=256, blank=True)
+    email = models.EmailField(max_length=64, blank=True) # 이메일
+    school = models.CharField(max_length=64, blank=True) # 학교
+    college = models.CharField(max_length=64, blank=True) # 단과대학
 
 
     objects = MutsaUserManager()
@@ -43,7 +53,5 @@ class MutsaUser(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_admin
+    
 
-
-
-# Create your models here.
