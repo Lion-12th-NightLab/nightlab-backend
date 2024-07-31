@@ -56,5 +56,4 @@ class MutsaUser(AbstractBaseUser):
     
     class Meta:
         db_table = 'mutsa_user'
-    
-
+ 
