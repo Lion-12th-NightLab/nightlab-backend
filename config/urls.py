@@ -26,6 +26,7 @@ from rest_framework import routers, permissions
 from auths.views import login,token_reissue #verify
 from users.views import user_signup, users_list, nickname_check
 from verify.views import SendVerification, CheckVerifycode
+from timer.views import timer_start, timer_stop, timer_rest
 
 
 router = routers.DefaultRouter()
@@ -50,7 +51,10 @@ urlpatterns = [
     path("auth/verify/check", CheckVerifycode),
     path("auth/signup", user_signup),
     path("users/list", users_list),
-    path("auth/check/nickname", nickname_check)
+    path("auth/check/nickname", nickname_check),
+    path("api/timer/start", timer_start),
+    path("api/timer/stop", timer_stop),
+    path("api/timer/rest", timer_rest)
 ]
 
 
