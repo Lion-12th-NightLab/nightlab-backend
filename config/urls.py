@@ -24,7 +24,7 @@ from drf_yasg.views import get_schema_view
 from rest_framework import routers, permissions
 
 from auths.views import login,token_reissue #verify
-from users.views import user,users_list
+from users.views import user_signup, users_list, nickname_check
 from verify.views import SendVerification, CheckVerifycode
 
 
@@ -46,10 +46,11 @@ urlpatterns = [
 
     path("auth/kakao/login", login),
     path("auth/kakao/token_reissue", token_reissue),
-    path("verify", SendVerification),
-    path("verify/check", CheckVerifycode),
-    path("users", user),
-    path("users/list", users_list)
+    path("auth/verify", SendVerification),
+    path("auth/verify/check", CheckVerifycode),
+    path("auth/signup", user_signup),
+    path("users/list", users_list),
+    path("auth/check/nickname", nickname_check)
 ]
 
 

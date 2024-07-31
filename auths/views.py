@@ -117,7 +117,7 @@ def token_reissue(request):
     try:
         user = MutsaUser.objects.get(refresh_token=refresh_token) # 데이터베이스에서 refresh_token이 같은 유저 조회
     except MutsaUser.DoesNotExist:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response({"detail": "해당 회원이 존재하지 않습니다."},status=status.HTTP_400_BAD_REQUEST)
     
     try:
         # Refresh token을 사용하여 새로운 access token 생성

@@ -24,20 +24,16 @@ class MutsaUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-class ProfileChoices(models.TextChoices):
-    gentle = 'gentle', 'gentle' # 온화한 등대지기
-    serious = 'serious', 'serious' # 진지한 등대지기
-    sharp = 'sharp', 'sharp' # 까칠한 등대지기
+# class ProfileChoices(models.TextChoices):
+#     gentle = 'gentle', 'gentle' # 온화한 등대지기
+#     serious = 'serious', 'serious' # 진지한 등대지기
+#     sharp = 'sharp', 'sharp' # 까칠한 등대지기
 
 
 class MutsaUser(AbstractBaseUser):
     nickname = models.CharField(max_length=64, unique=True) # 카카오 닉네임
     user_name = models.CharField(max_length=64, blank=True) #사용자로부터 받는 닉네임
-    profile = models.CharField( #프로필 
-        max_length=10,
-        choices=ProfileChoices.choices,
-        blank=True
-    )
+    profile = models.CharField(max_length=64, blank=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     refresh_token = models.CharField(max_length=256, blank=True)
