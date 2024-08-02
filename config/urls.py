@@ -25,7 +25,7 @@ from rest_framework import routers, permissions
 
 from auths.views import login,token_reissue #verify
 from todos.views import TodoUpdateAndDelete, TodoCheckBox, TodoCreateAndGetAll
-from users.views import user_signup, users_list, nickname_check
+from users.views import user_signup, users_list, nickname_check, MypageGetAndUpdate, UserRevoke
 from verify.views import SendVerification, CheckVerifycode
 from timer.views import timer_start, timer_stop, timer_rest_start, timer_rest_stop
 from memo.views import memo, memo_list
@@ -47,23 +47,35 @@ schema_view = get_schema_view(
 urlpatterns = [
     path("admin/", admin.site.urls),
 
+    # auth
     path("auth/kakao/login", login),
     path("auth/kakao/token_reissue", token_reissue),
-
     path("auth/verify", SendVerification),
     path("auth/verify/check", CheckVerifycode),
     path("auth/signup", user_signup),
-    path("users/list", users_list),
     path("auth/check/nickname", nickname_check),
+
+    # timer
     path("api/timer/start", timer_start),
     path("api/timer/stop", timer_stop),
     path("api/timer/rest/start", timer_rest_start),
     path("api/timer/rest/stop", timer_rest_stop),
+
+    # users
+    path("api/users/list", users_list),
+
+    # todo
     path("api/todo", TodoCreateAndGetAll),
     path('api/todo/<int:todo_id>', TodoUpdateAndDelete),
     path('api/todo/checkbox/<int:todo_id>', TodoCheckBox),
+
+    # memo
     path("api/memo",memo),
-    path("api/memo/all", memo_list)
+    path("api/memo/all", memo_list),
+
+    # mypage
+    path("api/mypage",MypageGetAndUpdate),
+    path("api/mypage/revoke",UserRevoke),
 
 ]
 

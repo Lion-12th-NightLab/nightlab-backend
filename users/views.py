@@ -96,13 +96,13 @@ def nickname_check(request):
     method='get',
     operation_id='회원정보 조회 API',
     operation_description='마이페이지에서 사용자의 정보를 조회하는 API입니다.',
-    tags=['User']
+    tags=['MyPage']
 )
 @swagger_auto_schema(
     method='patch',
     operation_id='회원정보 수정 API',
     operation_description='마이페이지에서 사용자의 정보를 수정하는 API입니다.',
-    tags=['User'],
+    tags=['MyPage'],
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         properties={
@@ -117,9 +117,9 @@ def nickname_check(request):
 @permission_classes([IsAuthenticated])
 # 회원정보 조회 및 수정
 def MypageGetAndUpdate(request):
+    # 현재 인증된 사용자 가져오기
+    user = request.user
     if request.method == 'GET':
-        # 현재 인증된 사용자 가져오기
-        user = request.user
         # 사용자 정보 조회
         user_data = {
             'profile': user.profile,
@@ -132,6 +132,43 @@ def MypageGetAndUpdate(request):
             return Response(user_serializer.data,status=status.HTTP_200_OK)
         else:
             return Response(user_serializer.errors, status=400)
+
+    elif request.method == 'PATCH':
+        # 사용자 정보 수정
+        profile = request.data.get('profile')
+        user_name = request.data.get('user_name')
+        college = request.data.get('college')
+
+        if profile:
+            user.profile = profile
+        if user_name:
+            user.user_name = user_name
+        if college:
+            user.college = college
+
+        user.save()
+
+        return Response({'detail': "성공적으로 수정되었습니다"}, status=status.HTTP_200_OK)
+
+
+
+@swagger_auto_schema(
+    method='delete',
+    operation_id='사용자 탈퇴 API',
+    operation_description='사용자 탈퇴 API입니다.',
+    tags=['MyPage'],
+
+)
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def UserRevoke(request):
+    # 현재 인증된 사용자 가져오기
+    user = request.user
+
+    # 사용자 삭제 - 유저와 연관관계가 있는 테이블들도 다 삭제됨
+    user.delete()
+
+    return Response({"detail": "성공적으로 탈퇴되었습니다"}, status=status.HTTP_200_OK)
 
 
 
