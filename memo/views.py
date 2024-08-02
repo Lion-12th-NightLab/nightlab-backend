@@ -14,12 +14,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from auths.models import MutsaUser
 from .serializers import MemoRequestSerializer, MemoResponseSerializer
 
-from django.core.mail import EmailMessage
-from django.utils.crypto import get_random_string
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
-from django.utils.crypto import get_random_string
 from dotenv import load_dotenv
 from .models import Memo
 from datetime import timedelta
@@ -38,7 +32,20 @@ def real_time_timer(timer):
         return timer.rest_time
     else:
         now_time = timezone.now()
-        plus_time = now_time - timer.rest_date
+        
+        # 한 번도 쉰 적 없고, 종료도 하지 않은 경우
+        if timer.rest_date is None and timer.stop_time is None:
+            # 현재 시간과 시작 시간 사이의 경과 시간을 계산
+            plus_time = now_time - timer.start_time
+            
+        # 한 번도 쉬지 않은 채로 종료한 경우
+        elif timer.rest_date is None and timer.stop_time is not None:
+            # 종료 시간과 시작 시간 사이의 경과 시간을 계산
+            return timer.stop_time
+            
+        # 쉬고 다시 시작한 경우
+        else:
+            plus_time = now_time - timer.rest_date
         
         # Convert timedelta to total seconds
         total_seconds = plus_time.total_seconds()
@@ -89,6 +96,8 @@ def memo(request):
     profile = user_data.profile
     college = user_data.college
 
+    Memo.objects.filter(user=user).delete()
+
     memo = Memo.objects.create(
         user=user,
         content=content,  # content를 serializer에서 가져옴
@@ -96,7 +105,6 @@ def memo(request):
     )
 
     response_data = {
-        "code": 200,
         "detail": "memo가 성공적으로 등록되었습니다.",
         "data": {
             "id": memo.id,
@@ -111,7 +119,34 @@ def memo(request):
     return Response(response_data, status=status.HTTP_201_CREATED)
 
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def memo_list(request):
+    memos = Memo.objects.all().order_by('-id')
 
+    # Prepare the list of formatted memos
+    formatted_memos = []
+    for memo in memos:
+        user = memo.user
+        time = get_last_timer(user)
+        timer = real_time_timer(time)
+
+        formatted_memo = {
+            "id": memo.id,
+            "content": memo.content,
+            "user_name": user.user_name,  # Adjust according to your actual model field names
+            "profile": user.profile,  # Adjust according to your actual model field names
+            "college": user.college,  # Adjust according to your actual model field names
+            "timer": str(timer)  # Assuming timer is a field that you convert to string
+        }
+        formatted_memos.append(formatted_memo)
+    
+    response_data = {
+        "detail": "memo가 성공적으로 조회되었습니다.",
+        "data": formatted_memos
+    }
+
+    return Response(response_data, status=status.HTTP_200_OK)
 
     
     
