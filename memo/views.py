@@ -26,6 +26,7 @@ from datetime import timedelta
 from django.utils import timezone
 from timer.models import Timer
 from auths.models import MutsaUser
+from datetime import timedelta, time
 
 load_dotenv()
 
@@ -33,16 +34,42 @@ def get_last_timer(user):
     return Timer.objects.filter(user=user).order_by('-id').first()
 
 def real_time_timer(timer):
-    if timer.rest_status == True:
+    if timer.rest_status:
         return timer.rest_time
     else:
-        print("time 시작")
         now_time = timezone.now()
         plus_time = now_time - timer.rest_date
-        print(plus_time)
-        print(timer.rest_time)
-        time = timer.rest_time +  plus_time
-        return time
+        
+        # Convert timedelta to total seconds
+        total_seconds = plus_time.total_seconds()
+
+        # Calculate hours, minutes, and seconds from total seconds
+        hours, remainder = divmod(total_seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        
+        # Extract the current time from the `rest_time`
+        rest_hours = timer.rest_time.hour
+        rest_minutes = timer.rest_time.minute
+        rest_seconds = timer.rest_time.second
+
+        # Add the timedelta to the rest_time
+        new_hours = rest_hours + int(hours)
+        new_minutes = rest_minutes + int(minutes)
+        new_seconds = rest_seconds + int(seconds)
+        
+        # Handle overflow of seconds and minutes
+        if new_seconds >= 60:
+            new_seconds -= 60
+            new_minutes += 1
+        if new_minutes >= 60:
+            new_minutes -= 60
+            new_hours += 1
+        if new_hours >= 24:
+            new_hours -= 24  # To stay within the 24-hour range
+        
+        # Create and return the new time object
+        updated_time = time(hour=new_hours, minute=new_minutes, second=new_seconds)
+        return updated_time
 
 
 @api_view(['POST'])
