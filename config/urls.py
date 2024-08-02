@@ -24,6 +24,7 @@ from drf_yasg.views import get_schema_view
 from rest_framework import routers, permissions
 
 from auths.views import login,token_reissue #verify
+from todos.views import CreateTodo
 from users.views import user,users_list
 from verify.views import SendVerification, CheckVerifycode
 
@@ -49,7 +50,9 @@ urlpatterns = [
     path("verify", SendVerification),
     path("verify/check", CheckVerifycode),
     path("users", user),
-    path("users/list", users_list)
+    path("users/list", users_list),
+    path("users/list", users_list),
+    path("todo",CreateTodo)
 ]
 
 

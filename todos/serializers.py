@@ -1,8 +1,13 @@
 from rest_framework import serializers
 from todos.models import Todo
 
-class TodoSerializer(serializers.ModelSerializer):
+class TodoDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Todo
-        fields = ['id', 'user', 'text', 'completed']  # 사용할 필드 설정
-        read_only_fields = ['user']  
+        fields = ['id', 'text', 'completed']
+
+class TodoCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Todo
+        fields = ['text']
+

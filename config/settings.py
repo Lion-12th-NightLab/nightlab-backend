@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'auths',
     "users",
     "verify",
-    "todos"
+    "todos",
 ]
 
 MIDDLEWARE = [
