@@ -3,10 +3,13 @@ from auths.models import MutsaUser
 
 class Timer(models.Model):
     user = models.ForeignKey(MutsaUser, on_delete = models.CASCADE)
-    start_time = models.DateTimeField()
-    stop_time = models.DateTimeField(null=True, blank=True)
-    rest_time = models.DateTimeField(null=True, blank=True)
-    duration = models.DurationField(null=True, blank=True)
+    start_date = models.DateTimeField(null=True, blank=True)
+    rest_date = models.DateTimeField(null=True, blank=True)
+    stop_date = models.DateTimeField(null=True, blank=True)
+    start_time = models.TimeField()
+    stop_time = models.TimeField(null=True, blank=True)
+    rest_time = models.TimeField(null=True, blank=True)
+    rest_status =models.BooleanField(null=True, default=False)
 
     class Meta:
         db_table = "timer"
