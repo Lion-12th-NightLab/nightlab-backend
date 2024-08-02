@@ -24,6 +24,7 @@ from drf_yasg.views import get_schema_view
 from rest_framework import routers, permissions
 
 from auths.views import login,token_reissue #verify
+from todos.views import TodoUpdateAndDelete, TodoCheckBox, TodoCreateAndGetAll
 from users.views import user_signup, users_list, nickname_check
 from verify.views import SendVerification, CheckVerifycode
 from timer.views import timer_start, timer_stop, timer_rest_start, timer_rest_stop
@@ -48,6 +49,7 @@ urlpatterns = [
 
     path("auth/kakao/login", login),
     path("auth/kakao/token_reissue", token_reissue),
+
     path("auth/verify", SendVerification),
     path("auth/verify/check", CheckVerifycode),
     path("auth/signup", user_signup),
@@ -57,7 +59,11 @@ urlpatterns = [
     path("api/timer/stop", timer_stop),
     path("api/timer/rest/start", timer_rest_start),
     path("api/timer/rest/stop", timer_rest_stop),
-    path("api/memo",memo )
+    path("api/todo", TodoCreateAndGetAll),
+    path('api/todo/<int:todo_id>', TodoUpdateAndDelete),
+    path('api/todo/checkbox/<int:todo_id>', TodoCheckBox),
+    path("api/memo",memo),
+
 ]
 
 
