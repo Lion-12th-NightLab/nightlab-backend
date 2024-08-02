@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "verify",
     "todos",
     "timer",
+    "memo"
 ]
 
 MIDDLEWARE = [
