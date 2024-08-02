@@ -27,6 +27,7 @@ from auths.views import login,token_reissue #verify
 from users.views import user_signup, users_list, nickname_check
 from verify.views import SendVerification, CheckVerifycode
 from timer.views import timer_start, timer_stop, timer_rest_start, timer_rest_stop
+from memo.views import memo
 
 
 router = routers.DefaultRouter()
@@ -55,7 +56,8 @@ urlpatterns = [
     path("api/timer/start", timer_start),
     path("api/timer/stop", timer_stop),
     path("api/timer/rest/start", timer_rest_start),
-    path("api/timer/rest/stop", timer_rest_stop)
+    path("api/timer/rest/stop", timer_rest_stop),
+    path("api/memo",memo )
 ]
 
 

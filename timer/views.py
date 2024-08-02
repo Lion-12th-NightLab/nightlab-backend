@@ -112,9 +112,8 @@ def timer_rest_stop(request):
         if not recent_timer:
             return Response({"detail": "시작된 타이머가 없습니다."}, status=status.HTTP_404_NOT_FOUND)
 
-        recent_timer.rest_time = validated_data.get('rest_time')
         recent_timer.rest_date = timezone.now()
-        recent_timer.rest_status = True
+        recent_timer.rest_status = False
         recent_timer.save()
 
         recent_timer.save()
