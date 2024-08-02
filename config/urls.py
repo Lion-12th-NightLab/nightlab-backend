@@ -29,6 +29,7 @@ from users.views import user_signup, users_list, nickname_check
 from verify.views import SendVerification, CheckVerifycode
 from timer.views import timer_start, timer_stop, timer_rest_start, timer_rest_stop
 from memo.views import memo, memo_list
+from analyze.views import analyze
 
 
 router = routers.DefaultRouter()
@@ -63,7 +64,8 @@ urlpatterns = [
     path('api/todo/<int:todo_id>', TodoUpdateAndDelete),
     path('api/todo/checkbox/<int:todo_id>', TodoCheckBox),
     path("api/memo",memo),
-    path("api/memo/all", memo_list)
+    path("api/memo/all", memo_list),
+    path("api/analyze", analyze)
 
 ]
 
