@@ -29,6 +29,7 @@ from users.views import user_signup, users_list, nickname_check, MypageGetAndUpd
 from verify.views import SendVerification, CheckVerifycode
 from timer.views import timer_start, timer_stop, timer_rest_start, timer_rest_stop
 from memo.views import memo, memo_list
+from analyze.views import analyze
 
 
 router = routers.DefaultRouter()
@@ -73,9 +74,13 @@ urlpatterns = [
     path("api/memo",memo),
     path("api/memo/all", memo_list),
 
+
     # mypage
     path("api/mypage",MypageGetAndUpdate),
     path("api/mypage/revoke",UserRevoke),
+
+    # analyze
+    path("api/analyze", analyze)
 
 ]
 
