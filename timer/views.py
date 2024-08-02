@@ -1,3 +1,5 @@
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
@@ -10,6 +12,20 @@ from django.utils import timezone
 
 load_dotenv()
 
+
+@swagger_auto_schema(
+    method='post',
+    operation_id='타이머 시작 API',
+    operation_description='타이머를 시작하는 API입니다.',
+    tags=['Timer'],
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'start_time': openapi.Schema(type=openapi.TYPE_STRING, description='타이머 시작 시간'),
+        },
+        required=['start_time']  # 필수 필드로 설정
+    )
+)
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def timer_start(request):
@@ -28,6 +44,20 @@ def timer_start(request):
     )
     return Response({"detail": "요청이 성공했습니다."}, status=status.HTTP_200_OK)
 
+
+@swagger_auto_schema(
+    method='post',
+    operation_id='타이머 정지 API',
+    operation_description='타이머를 정지하는 API입니다.',
+    tags=['Timer'],
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'stop_time': openapi.Schema(type=openapi.TYPE_STRING, description='타이머 정지 시간'),
+        },
+        required=['stop_time']  # 필수 필드로 설정
+    )
+)
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def timer_stop(request):
@@ -62,6 +92,19 @@ def timer_stop(request):
         return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+@swagger_auto_schema(
+    method='post',
+    operation_id='타이머 휴식 시작 API',
+    operation_description='타이머의 휴식을 시작하는 API입니다.',
+    tags=['Timer'],
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'rest_time': openapi.Schema(type=openapi.TYPE_STRING, description='휴식 시작 시간'),
+        },
+        required=['rest_time']  # 필수 필드로 설정
+    )
+)
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def timer_rest_start(request):
@@ -87,6 +130,17 @@ def timer_rest_start(request):
         return Response({"detail": f"서버에서 오류가 발생했습니다: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 
+@swagger_auto_schema(
+    method='post',
+    operation_id='타이머 휴식 정지 API',
+    operation_description='타이머의 휴식을 정지하는 API입니다.',
+    tags=['Timer'],
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={},
+        required=[]  # 요청 본체가 필요 없는 경우
+    )
+)
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def timer_rest_stop(request):

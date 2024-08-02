@@ -1,4 +1,5 @@
-
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -8,6 +9,20 @@ from todos.models import Todo
 from todos.serializers import TodoDetailSerializer, TodoCreateSerializer
 from users.serializers import UserSerializer
 
+@swagger_auto_schema(
+    method='post',
+    operation_id='todo 생성 API',
+    operation_description='todo를 생성합니다',
+    tags=['Todo'],
+    request_body=TodoCreateSerializer,
+)
+@swagger_auto_schema(
+    method='get',  # GET 메서드에 대한 설정
+    operation_id='todo 조회 API',
+    operation_description='사용자의 모든 todo 항목을 조회합니다',
+    tags=['Todo'],
+    responses={200: TodoDetailSerializer(many=True)},  # 응답 형식 지정
+)
 @api_view(['POST', 'GET'])  # POST와 GET 메서드를 처리
 @permission_classes([IsAuthenticated])
 # todo 생성 및 조회 API
@@ -41,6 +56,25 @@ def TodoCreateAndGetAll(request):
         return Response(todo_serializer.data, status=status.HTTP_200_OK)
 
 
+@swagger_auto_schema(
+    method='patch',
+    operation_id='todo 수정 API',
+    operation_description='todo를 수정합니다',
+    tags=['Todo'],
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'text': openapi.Schema(type=openapi.TYPE_STRING, description='수정할 todo 내용')
+        },
+        required=['text']  # 필수 필드로 설정
+    ),
+)
+@swagger_auto_schema(
+    method='delete',  # GET 메서드에 대한 설정
+    operation_id='todo 삭제 API',
+    operation_description='사용자의 todo를 삭제합니다',
+    tags=['Todo']  # 응답 형식 지정
+)
 @api_view(['PATCH', 'DELETE'])  # PATCH와 DELETE 메서드를 처리
 @permission_classes([IsAuthenticated])
 # todo 수정 및 삭제하는 API
@@ -64,7 +98,14 @@ def TodoUpdateAndDelete(request, todo_id):
         todo.delete()  # Todo 항목 삭제
         return Response({'detail': "성공적으로 삭제되었습니다"}, status=status.HTTP_200_OK)
 
-@api_view(['POST'])
+
+@swagger_auto_schema(
+    method='patch',  # GET 메서드에 대한 설정
+    operation_id='todo 완료 여부 체크박스 API',
+    operation_description='todo 항목의 체크박스를 클릭할 시 TRUE → FALSE or FALSE → TRUE 값으로 변동시킵니다.',
+    tags=['Todo']  # 응답 형식 지정
+)
+@api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
 # todo 완료 체크표시 API
 def TodoCheckBox(request, todo_id):
