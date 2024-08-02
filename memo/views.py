@@ -2,6 +2,8 @@ import os
 
 import requests
 import jwt
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -79,6 +81,19 @@ def real_time_timer(timer):
         return updated_time
 
 
+@swagger_auto_schema(
+    method='post',
+    operation_id='메모 등록 API',
+    operation_description='사용자가 메모를 등록하는 API입니다.',
+    tags=['Memo'],
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'content': openapi.Schema(type=openapi.TYPE_STRING, description='메모 내용'),
+        },
+        required=['content']  # 필수 필드로 설정
+    )
+)
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def memo(request):
@@ -119,6 +134,12 @@ def memo(request):
     return Response(response_data, status=status.HTTP_201_CREATED)
 
 
+@swagger_auto_schema(
+    method='get',
+    operation_id='메모 조회 API',
+    operation_description='모든 메모를 조회하는 API입니다.',
+    tags=['Memo']
+)
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def memo_list(request):
