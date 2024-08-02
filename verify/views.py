@@ -2,6 +2,8 @@ import os
 
 import requests
 import jwt
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -54,7 +56,19 @@ def find_universities_by_email(email):
             print(f"File not found: {file_path}")
     return matched_universities
 
-
+@swagger_auto_schema(
+    method='post',
+    operation_id='인증 코드 발송 API',
+    operation_description='사용자의 이메일로 인증 코드를 발송하는 API입니다.',
+    tags=['Auth'],
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'email': openapi.Schema(type=openapi.TYPE_STRING, description='사용자의 이메일 주소'),
+        },
+        required=['email']  # 필수 필드로 설정
+    )
+)
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def SendVerification(request):
@@ -118,6 +132,19 @@ def SendVerification(request):
     return Response({'detail': '인증 코드가 이메일로 발송되었습니다.'}, status=status.HTTP_200_OK)
 
 
+@swagger_auto_schema(
+    method='post',
+    operation_id='인증 코드 확인 API',
+    operation_description='사용자가 입력한 인증 코드를 확인하는 API입니다.',
+    tags=['Auth'],
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'verify_code': openapi.Schema(type=openapi.TYPE_STRING, description='사용자가 입력한 인증 코드'),
+        },
+        required=['verify_code']  # 필수 필드로 설정
+    )
+)
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def CheckVerifycode(request):

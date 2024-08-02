@@ -2,6 +2,8 @@ import os
 
 import requests
 import jwt
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -70,7 +72,20 @@ def kakao_nickname(kakao_data):
         return Response({'detail': 'OIDC 인증에 실패했습니다.'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
-# 로그인 API 
+# 로그인 API
+@swagger_auto_schema(
+    method='post',
+    operation_id='카카오 로그인 API',
+    operation_description=' 카카오 로그인 API입니다',
+    tags=['Auth'],
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'access_code': openapi.Schema(type=openapi.TYPE_STRING, description='카카오 로그인에 필요한 인가 코드')
+        },
+        required=['access_code']  # 필수 필드로 설정
+    )
+)
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login(request):
@@ -104,6 +119,19 @@ def login(request):
 
 
 # Refresh 토큰으로 Access 토큰 재발급하는 API
+@swagger_auto_schema(
+    method='post',
+    operation_id='토큰 재발급 API',
+    operation_description='Refresh Token을 사용하여 Access Token을 재발급합니다.',
+    tags=['Auth'],
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'refresh_token': openapi.Schema(type=openapi.TYPE_STRING, description='재발급 요청에 필요한 Refresh Token')
+        },
+        required=['refresh_token']  # 필수 필드로 설정
+    )
+)
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def token_reissue(request):
