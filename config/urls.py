@@ -24,9 +24,9 @@ from drf_yasg.views import get_schema_view
 from rest_framework import routers, permissions
 
 from auths.views import login,token_reissue #verify
-from todos.views import CreateTodo
-from users.views import user,users_list
+from users.views import user_signup, users_list, nickname_chec
 from verify.views import SendVerification, CheckVerifycode
+from timer.views import timer_start, timer_stop, timer_rest_start, timer_rest_stop
 
 
 router = routers.DefaultRouter()
@@ -47,12 +47,16 @@ urlpatterns = [
 
     path("auth/kakao/login", login),
     path("auth/kakao/token_reissue", token_reissue),
-    path("verify", SendVerification),
-    path("verify/check", CheckVerifycode),
-    path("users", user),
+
+    path("auth/verify", SendVerification),
+    path("auth/verify/check", CheckVerifycode),
+    path("auth/signup", user_signup),
     path("users/list", users_list),
-    path("users/list", users_list),
-    path("todo",CreateTodo)
+    path("auth/check/nickname", nickname_check),
+    path("api/timer/start", timer_start),
+    path("api/timer/stop", timer_stop),
+    path("api/timer/rest/start", timer_rest_start),
+    path("api/timer/rest/stop", timer_rest_stop)
 ]
 
 

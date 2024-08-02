@@ -6,7 +6,10 @@ class UserSerializer(serializers.ModelSerializer):
         model = MutsaUser
         fields = ['id','nickname']
 
-class UserResponseSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MutsaUser
-        fields = '__all__'
+class UserResponseSerializer(serializers.Serializer):
+    college = serializers.CharField()
+    user_name = serializers.CharField()
+    profile = serializers.CharField()
+
+class UserNicknameSerializer(serializers.Serializer):
+    user_name = serializers.CharField()

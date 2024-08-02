@@ -30,9 +30,7 @@ from django.conf import settings
 
 file_path = os.path.join(settings.BASE_DIR, 'verify', 'universities.json')
 
-# # JSON 파일을 읽어서 데이터 로드하기
-# with open('universities.json', 'r') as file:
-#     universities = json.load(file)
+
 
 # 이메일 주소에서 도메인 부분을 추출하는 함수
 def extract_domain(email):
@@ -69,7 +67,7 @@ def SendVerification(request):
     # 이메일 주소와 일치하는 학교 찾기
     matched_universities = find_universities_by_email(email)
     if not matched_universities:
-        return Response({"message": "학교 메일이 아닙니다."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"detail": "학교 메일이 아닙니다."}, status=status.HTTP_400_BAD_REQUEST)
 
 
     # Serialize the user data
@@ -83,10 +81,10 @@ def SendVerification(request):
     user_data = MutsaUser.objects.get(id=user_id)
 
     if not email:
-        return Response({"message": "이메일을 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"detail": "이메일을 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST)
         
     if MutsaUser.objects.filter(email=email).exists():
-        return Response({"message": "이미 사용 중인 이메일입니다."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"detail": "이미 사용 중인 이메일입니다."}, status=status.HTTP_400_BAD_REQUEST)
         
     # 이미 인증코드가 존재할 경우
     if Verify.objects.filter(user=user_data).exists(): 
@@ -117,7 +115,7 @@ def SendVerification(request):
     user_data.save()
     verify_code.save()
         
-    return Response({'message': '인증 코드가 이메일로 발송되었습니다.'}, status=status.HTTP_200_OK)
+    return Response({'detail': '인증 코드가 이메일로 발송되었습니다.'}, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
@@ -134,11 +132,11 @@ def CheckVerifycode(request):
         verify_instance = Verify.objects.get(user=user_data)
     except Verify.DoesNotExist:
         verify_instance = None
-        return Response({"message": "이메일을 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"detail": "이메일을 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST)
     
     if verify_instance.verify_code == serializer.validated_data.get('verify_code'):
-        return Response({"message": "인증되었습니다."}, status=status.HTTP_200_OK)
+        return Response({"detail": "인증되었습니다."}, status=status.HTTP_200_OK)
     else:
-        return Response({"message": "인증을 실패하였습니다."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"detail": "인증을 실패하였습니다."}, status=status.HTTP_400_BAD_REQUEST)
 
 
