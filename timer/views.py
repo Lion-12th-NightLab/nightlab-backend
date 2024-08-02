@@ -1,28 +1,11 @@
-import os
-
-import requests
-import jwt
-
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.serializers import Serializer
-
-from rest_framework_simplejwt.tokens import RefreshToken
-
-from auths.models import MutsaUser
+from todos.models import Todo
 from .serializers import TimerSerializer
-
-from django.core.mail import EmailMessage
-from django.utils.crypto import get_random_string
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
-from django.utils.crypto import get_random_string
 from dotenv import load_dotenv
 from .models import Timer
-from datetime import timedelta
 from django.utils import timezone
 
 load_dotenv()
@@ -65,6 +48,14 @@ def timer_stop(request):
         recent_timer.stop_time = validated_data.get('stop_time')
         recent_timer.stop_date = timezone.now() 
         recent_timer.save()
+
+        # 현재 사용자의 모든 Todo 항목 조회
+        todos = Todo.objects.filter(user = user)
+
+        if not todos.exists():
+            return Response({'detail': '삭제할 Todo 항목이 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
+
+        todos.delete()  # 모든 Todo 항목 삭제
 
         return Response({"detail": "요청이 성공했습니다"}, status=status.HTTP_200_OK)
     except Exception as e:
