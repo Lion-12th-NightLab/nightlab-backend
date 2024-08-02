@@ -14,14 +14,27 @@ from users.serializers import UserSerializer
     operation_id='todo 생성 API',
     operation_description='todo를 생성합니다',
     tags=['Todo'],
-    request_body=TodoCreateSerializer,
-)
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'todo': openapi.Schema(
+                type=openapi.TYPE_ARRAY,
+                items=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'text': openapi.Schema(type=openapi.TYPE_STRING, description='TODO 항목 내용'),
+                    },
+                    required=['text']  # text 필드는 필수
+                )
+            )
+        },
+        required=['todo']
+))
 @swagger_auto_schema(
     method='get',  # GET 메서드에 대한 설정
     operation_id='todo 조회 API',
     operation_description='사용자의 모든 todo 항목을 조회합니다',
-    tags=['Todo'],
-    responses={200: TodoDetailSerializer(many=True)},  # 응답 형식 지정
+    tags=['Todo']
 )
 @api_view(['POST', 'GET'])  # POST와 GET 메서드를 처리
 @permission_classes([IsAuthenticated])
