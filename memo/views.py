@@ -103,8 +103,12 @@ def memo(request):
     
     user = request.user
     user_data = MutsaUser.objects.get(id=user.id)
-    time = get_last_timer(user)
-    timer = real_time_timer(time)
+    user_time = get_last_timer(user)
+    if user_time:
+        timer = real_time_timer(user_time)
+    else:
+        timer = time(hour=0, minute=0, second=0)
+
     content = serializer.validated_data.get('content')
 
     user_name = user_data.user_name
@@ -149,8 +153,12 @@ def memo_list(request):
     formatted_memos = []
     for memo in memos:
         user = memo.user
-        time = get_last_timer(user)
-        timer = real_time_timer(time)
+        user_time = get_last_timer(user)
+        
+        if user_time:
+            timer = real_time_timer(user_time)
+        else:
+            timer = time(hour=0, minute=0, second=0)
 
         formatted_memo = {
             "id": memo.id,
