@@ -53,3 +53,29 @@ def main(request):
     }
 
     return Response(response_data, status=status.HTTP_200_OK)
+
+
+@swagger_auto_schema(
+    method='get',
+    operation_id='온보딩 진행여부 확인 API',
+    operation_description='온보딩을 진행할지 확인하는 API입니다.',
+    tags=['Main']
+)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def onboard(request):
+    try:
+        user = MutsaUser.objects.get(id = request.user.id)
+    except MutsaUser.DoesNotExist:
+        return Response({"detail": "사용자를 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND)
+
+
+    onboarding = not (user.college and user.user_name and user.profile)
+
+    response_data = {
+        "detail": "요청이 성공했습니다.",
+        "onboarding" : onboarding
+    }
+
+    return Response(response_data, status=status.HTTP_200_OK)
