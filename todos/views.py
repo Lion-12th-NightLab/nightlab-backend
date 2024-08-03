@@ -127,7 +127,12 @@ def TodoCheckBox(request, todo_id):
     except Todo.DoesNotExist:
         return Response({'detail': 'Todo 항목을 찾을 수 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
 
-    todo.completed = True # 완료 체크
+    # todo 항목의 complete 값이 TRUE → FALSE or FALSE → TRUE 값으로 변동
+    if todo.completed == False :
+        todo.completed = True
+    else:
+        todo.completed = False
+
     todo.save()
 
     return Response({'detail': "성공적으로 수정되었습니다"}, status=status.HTTP_200_OK)
