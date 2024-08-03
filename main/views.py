@@ -27,19 +27,22 @@ def main(request):
     
     connect_total_user = []
     now_time = timezone.now()
-    # future_wake_date = wakes.wake_date + timedelta(minutes=30)
 
     for user in login_total_user:
         print(user)
         timer = Timer.objects.filter(user=user).order_by('-start_date').first()
-        if not timer is exit:
+        
+        if not timer:
             continue
-        if timer.start_date != None and timer.stop_date == None:
+
+        if timer.start_date is not None and timer.stop_date is None:
             connect_total_user.append(user)
         else:
             connect_time = timer.stop_date + timedelta(minutes=30)
             if connect_time >= now_time:
                 connect_total_user.append(user)
+            else:
+                continue
     
     response_data = {
         "detail": "요청이 성공했습니다.",
