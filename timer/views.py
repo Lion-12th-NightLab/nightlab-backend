@@ -82,10 +82,8 @@ def timer_stop(request):
         # 현재 사용자의 모든 Todo 항목 조회
         todos = Todo.objects.filter(user = user)
 
-        if not todos.exists():
-            return Response({'detail': '삭제할 Todo 항목이 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
-
-        todos.delete()  # 모든 Todo 항목 삭제
+        if todos.exists():
+            todos.delete() # 모든 Todo 항목 삭제
 
         return Response({"detail": "요청이 성공했습니다"}, status=status.HTTP_200_OK)
     except Exception as e:
