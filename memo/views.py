@@ -172,7 +172,10 @@ def memo_list(request):
     
     response_data = {
         "detail": "memo가 성공적으로 조회되었습니다.",
-        "data": formatted_memos
+        "data":
+        {
+            "memo": formatted_memos
+        }
     }
 
     return Response(response_data, status=status.HTTP_200_OK)
