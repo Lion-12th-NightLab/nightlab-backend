@@ -36,6 +36,13 @@ def calculate_average_time(timers):
         return average_time
     else:
         return time(hour=0, minute=0, second=0)
+    
+def round(time1, time2):
+    hour = time1.hour - time2.hour
+    minute = time1.minute - time2.minute
+    if minute >= 30:
+        hour += hour
+    return hour
 
 
 @swagger_auto_schema(
@@ -75,8 +82,8 @@ def analyze(request):
             "college_average" : college_average_time, #단과대학 평균 야작시간
             "total_average" : total_average_time, # 전체유저 평균 야작시간
             "user_average" : user_average_time, # 해당 유저 하루 평균 야작시간
-            "college_comparison" : college_average_time.hour - user_average_time.hour, # 되도록 정수타입으로 보내주기
-            "total_comparison" : total_average_time.hour - user_average_time.hour# 되도록 정수타입으로 보내주기
+            "college_comparison" : round(college_average_time,user_average_time), # 되도록 정수타입으로 보내주기
+            "total_comparison" : round(total_average_time,user_average_time)# 되도록 정수타입으로 보내주기
         }
     }
 
