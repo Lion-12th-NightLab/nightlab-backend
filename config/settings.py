@@ -60,7 +60,8 @@ INSTALLED_APPS = [
     "todos",
     "timer",
     "memo",
-    'analyze'
+    'analyze',
+    'main'
 ]
 
 MIDDLEWARE = [

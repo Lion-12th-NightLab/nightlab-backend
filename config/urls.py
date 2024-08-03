@@ -30,6 +30,7 @@ from verify.views import SendVerification, CheckVerifycode
 from timer.views import timer_start, timer_stop, timer_rest_start, timer_rest_stop
 from memo.views import memo, memo_list
 from analyze.views import analyze
+from main.views import main
 
 
 router = routers.DefaultRouter()
@@ -80,7 +81,10 @@ urlpatterns = [
     path("api/mypage/revoke",UserRevoke),
 
     # analyze
-    path("api/analyze", analyze)
+    path("api/analyze", analyze),
+
+    #main
+    path("api/main", main)
 
 ]
 
