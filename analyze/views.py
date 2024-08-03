@@ -38,8 +38,8 @@ def calculate_average_time(timers):
         return time(hour=0, minute=0, second=0)
     
 def round(time1, time2):
-    hour = time1.hour - time2.hour
-    minute = time1.minute - time2.minute
+    hour = time2.hour - time1.hour
+    minute = time2.minute - time1.minute
     if minute >= 30:
         hour += hour
     return hour
