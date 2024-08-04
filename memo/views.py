@@ -22,7 +22,7 @@ from datetime import timedelta
 from django.utils import timezone
 from timer.models import Timer
 from auths.models import MutsaUser
-from datetime import timedelta, time
+from datetime import timedelta, datetime, time
 
 load_dotenv()
 
@@ -38,7 +38,7 @@ def real_time_timer(timer):
         # 한 번도 쉰 적 없고, 종료도 하지 않은 경우
         if timer.rest_date is None and timer.stop_time is None:
             # 현재 시간과 시작 시간 사이의 경과 시간을 계산
-            plus_time = now_time - timer.start_time
+            plus_time = now_time - timer.start_date
             
         # 한 번도 쉬지 않은 채로 종료한 경우
         elif timer.rest_date is None and timer.stop_time is not None:
@@ -56,10 +56,14 @@ def real_time_timer(timer):
         hours, remainder = divmod(total_seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
         
-        # Extract the current time from the `rest_time`
-        rest_hours = timer.rest_time.hour
-        rest_minutes = timer.rest_time.minute
-        rest_seconds = timer.rest_time.second
+        try:
+            rest_hours = timer.rest_time.hour
+            rest_minutes = timer.rest_time.minute
+            rest_seconds = timer.rest_time.second
+        except AttributeError:
+            rest_hours = 0
+            rest_minutes = 0
+            rest_seconds = 0
 
         # Add the timedelta to the rest_time
         new_hours = rest_hours + int(hours)
