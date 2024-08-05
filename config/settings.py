@@ -201,6 +201,10 @@ SWAGGER_SETTINGS = {
         'BearerAuth': []
     }]
 }
+g
+SECURE_SSL_REDIRECT = True  # 모든 HTTP 요청을 HTTPS로 리다이렉트
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # 프록시 서버를 사용하는 경우
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com' # 메일 호스트 서버
