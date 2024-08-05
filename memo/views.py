@@ -40,8 +40,8 @@ def real_time_timer(timer):
             # 현재 시간과 시작 시간 사이의 경과 시간을 계산
             plus_time = now_time - timer.start_date
             
-        # 한 번도 쉬지 않은 채로 종료한 경우
-        elif timer.rest_date is None and timer.stop_time is not None:
+        # 한 번도 쉬지 않은 채로 종료한 경우, 쉬고 종료한 경우
+        elif timer.stop_time is not None:
             # 종료 시간과 시작 시간 사이의 경과 시간을 계산
             return timer.stop_time
             
