@@ -59,7 +59,18 @@ def TodoCreateAndGetAll(request):
             todo = Todo(text=text, user_id=user_id)
             todo.save()  # 각 todo 저장
 
-        return Response({'detail': "성공적으로 생성되었습니다"}, status=status.HTTP_201_CREATED)
+            todos = Todo.objects.filter(user=request.user)
+
+            todo_serializer = TodoDetailSerializer(todos, many=True)
+
+            response_data = {
+                "detail": "todo가 성공적으로 등록되었습니다!",
+                "data": {
+                    "todo": todo_serializer.data
+                }
+            }
+
+        return Response(response_data, status=status.HTTP_201_CREATED)
 
     elif request.method == 'GET':
         todos = Todo.objects.filter(user=request.user)  # 해당 사용자의 모든 Todo 항목 조회
