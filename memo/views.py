@@ -164,6 +164,9 @@ def memo_list(request):
         else:
             timer = time(hour=0, minute=0, second=0)
 
+        memo.timer = timer
+        memo.save()
+
         formatted_memo = {
             "id": memo.id,
             "content": memo.content,
