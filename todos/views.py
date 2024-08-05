@@ -49,9 +49,13 @@ def TodoCreateAndGetAll(request):
         user_id = user_serializer.data.get('id')
         todos = request.data.get('todo', [])
 
+
         todo_serializer = TodoCreateSerializer(data=todos, many=True)
         if not todo_serializer.is_valid():
             return Response(todo_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        # request로 받은 todo의 길이를 저장
+        len_todo = len(todos)
 
         # 요청이 todo list 형태라 반복문으로 저장
         for todo_data in todo_serializer.validated_data:
@@ -59,14 +63,16 @@ def TodoCreateAndGetAll(request):
             todo = Todo(text=text, user_id=user_id)
             todo.save()  # 각 todo 저장
 
-            todos = Todo.objects.filter(user=request.user)
-
+            # request로 받은 todo목록만 필터링합니다.
+            todos = Todo.objects.filter(user=request.user).order_by('-id')[:len_todo]
             todo_serializer = TodoDetailSerializer(todos, many=True)
+            # 직렬화된 데이터를 todo_id로 내림차순 정렬합니다.
+            sorted_todo_data = sorted(todo_serializer.data, key=lambda x: x['id'], reverse=False)
 
             response_data = {
                 "detail": "todo가 성공적으로 등록되었습니다!",
                 "data": {
-                    "todo": todo_serializer.data
+                    "todo": sorted_todo_data
                 }
             }
 
