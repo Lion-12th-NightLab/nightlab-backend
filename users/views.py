@@ -125,6 +125,7 @@ def MypageGetAndUpdate(request):
             'profile': user.profile,
             'user_name': user.user_name,
             'college': user.college,
+            'email': user.email
         }
         # 직렬화
         user_serializer = UserResponseSerializer(data=user_data)
