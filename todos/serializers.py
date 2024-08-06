@@ -11,3 +11,5 @@ class TodoCreateSerializer(serializers.ModelSerializer):
         model = Todo
         fields = ['text']
 
+    text = serializers.CharField(allow_blank=True)
+
