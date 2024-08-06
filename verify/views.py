@@ -50,7 +50,7 @@ def find_universities_by_email(email):
             with open(file_path, 'r') as file:
                 universities = json.load(file)
                 for university, domain in universities.items():
-                    if domain_to_check == domain:
+                    if domain_to_check.endswith(domain):  # 뒷부분 일치 확인
                         matched_universities.append(university)
         except FileNotFoundError:
             print(f"File not found: {file_path}")
