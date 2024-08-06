@@ -10,6 +10,7 @@ class UserResponseSerializer(serializers.Serializer):
     college = serializers.CharField()
     user_name = serializers.CharField()
     profile = serializers.CharField()
+    email = serializers.EmailField()
 
 class UserNicknameSerializer(serializers.Serializer):
     user_name = serializers.CharField()
